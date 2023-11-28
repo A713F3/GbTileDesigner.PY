@@ -3,11 +3,11 @@ from sys import platform
 import subprocess
 
 def clip_win(txt):
-    cmd='echo '+txt.strip()+'|clip'
+    cmd="echo '"+txt.strip()+"'|clip"
     return subprocess.check_call(cmd, shell=True)
 
 def clip_mac(txt):
-    cmd='echo '+txt.strip()+'|pbcopy'
+    cmd="echo '"+txt.strip()+"'|pbcopy"
     return subprocess.check_call(cmd, shell=True)
 
 copy_to_clip = clip_win
@@ -16,7 +16,7 @@ if platform == "darwin":
 
 
 def cells_to_2bpp(cells):
-    bpp = ""
+    bpp = "db "
 
     for row in cells:
         left, right = "", ""
@@ -27,10 +27,10 @@ def cells_to_2bpp(cells):
             left += l
             right += h
 
-        bpp += '{0:02x}'.format(int(left, 2)) + " "
-        bpp += '{0:02x}'.format(int(right, 2)) + " "
+        bpp += '${0:02x}, '.format(int(left, 2))
+        bpp += '${0:02x}, '.format(int(right, 2))
 
-    return bpp
+    return bpp[:-2].upper()
 
 
 pygame.init()
@@ -38,7 +38,7 @@ pygame.init()
 screen = pygame.display.set_mode([400, 500])
 pygame.display.set_caption("2BPP Designer")
 
-palette = {0:(23, 62, 12), 1:(65, 113, 45), 2:(151, 190, 60), 3:(170, 206, 66)}
+palette = {0:(170, 206, 66), 1:(151, 190, 60), 2:(65, 113, 45), 3:(23, 62, 12)}
 
 cell_space = 1
 cell_size = 40
